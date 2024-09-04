@@ -6,7 +6,6 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import "./tailwind.css";
-import { BookingProvider } from "./providers/context-provider";
 import { Toaster } from "./components/ui/toaster";
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -19,12 +18,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <BookingProvider>
           {children}
           <ScrollRestoration />
           <Scripts />
           <Toaster />
-        </BookingProvider>
       </body>
     </html>
   );
