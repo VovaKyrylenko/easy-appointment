@@ -1,16 +1,19 @@
-/**
- * By default, Remix will handle generating the HTTP Response for you.
- * You are free to delete this file if you'd like to, but if you ever want it revealed again, you can run `npx remix reveal` ✨
- * For more information, see https://remix.run/file-conventions/entry.server
- */
-
 import { PassThrough } from "node:stream";
 
 import type { AppLoadContext, EntryContext } from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
-import { isbot } from "isbot";
+import * as isbotModule from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
+
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+} from "@apollo/client";
+import { getDataFromTree } from "@apollo/client/react/ssr";
+import type { ReactElement } from "react";
 
 const ABORT_DELAY = 5_000;
 
@@ -19,12 +22,11 @@ export default function handleRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  // This is ignored so we can keep it in the template for visibility.  Feel
-  // free to delete this parameter in your app if you're not using it!
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  loadContext: AppLoadContext
+  loadContext: AppLoadContext,
 ) {
-  return isbot(request.headers.get("user-agent") || "")
+  let prohibitOutOfOrderStreaming =
+    isBotRequest(request.headers.get("user-agent")) || remixContext.isSpaMode;
+  return prohibitOutOfOrderStreaming
     ? handleBotRequest(
         request,
         responseStatusCode,
@@ -39,11 +41,29 @@ export default function handleRequest(
       );
 }
 
+function isBotRequest(userAgent: string | null) {
+  if (!userAgent) {
+    return false;
+  }
+
+  // isbot >= 3.8.0, >4
+  if ("isbot" in isbotModule && typeof isbotModule.isbot === "function") {
+    return isbotModule.isbot(userAgent);
+  }
+
+  // isbot < 3.8.0
+  if ("default" in isbotModule && typeof isbotModule.default === "function") {
+    return isbotModule.default(userAgent);
+  }
+
+  return false;
+}
+
 function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  remixContext: EntryContext,
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
@@ -65,7 +85,7 @@ function handleBotRequest(
             new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
-            })
+            }),
           );
 
           pipe(body);
@@ -82,7 +102,7 @@ function handleBotRequest(
             console.error(error);
           }
         },
-      }
+      },
     );
 
     setTimeout(abort, ABORT_DELAY);
@@ -93,16 +113,20 @@ function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  remixContext: EntryContext,
 ) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     let shellRendered = false;
+
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer
-        context={remixContext}
-        url={request.url}
-        abortDelay={ABORT_DELAY}
-      />,
+      await wrapRemixServerWithApollo(
+        <RemixServer
+          context={remixContext}
+          url={request.url}
+          abortDelay={ABORT_DELAY}
+        />,
+        request,
+      ),
       {
         onShellReady() {
           shellRendered = true;
@@ -115,7 +139,7 @@ function handleBrowserRequest(
             new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
-            })
+            }),
           );
 
           pipe(body);
@@ -132,9 +156,49 @@ function handleBrowserRequest(
             console.error(error);
           }
         },
-      }
+      },
     );
 
     setTimeout(abort, ABORT_DELAY);
   });
+}
+async function wrapRemixServerWithApollo(
+  remixServer: ReactElement,
+  request: Request,
+) {
+  const client = await getApolloClient(request);
+
+  const app = <ApolloProvider client={client}>{remixServer}</ApolloProvider>;
+
+  await getDataFromTree(app);
+  const initialState = client.extract();
+
+  const appWithData = (
+    <>
+      {app}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `window.__APOLLO_STATE__=${JSON.stringify(
+            initialState,
+          ).replace(/</g, "\\u003c")}`, // The replace call escapes the < character to prevent cross-site scripting attacks that are possible via the presence of </script> in a string literal
+        }}
+      />
+    </>
+  );
+  return appWithData;
+}
+
+async function getApolloClient(request: Request) {
+  const client = new ApolloClient({
+    ssrMode: true,
+    cache: new InMemoryCache(),
+    link: createHttpLink({
+      uri: "http://localhost:3000/graphql",
+      headers: {
+        ...Object.fromEntries(request.headers),
+      },
+      credentials: request.credentials ?? "same-origin",
+    }),
+  });
+  return client;
 }
