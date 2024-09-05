@@ -14,7 +14,7 @@ export default function Login() {
   const actionData = useActionData<typeof action>();
   const transition = useNavigation();
 
-  const isSubmitting = transition.state === "submitting";
+  const isSubmitting = transition.state !== "idle";
   return (
     <div className="flex items-center justify-center h-screen bg-gray-50">
       <Card className="w-full max-w-sm mx-auto p-6 bg-white shadow-md rounded-md">
