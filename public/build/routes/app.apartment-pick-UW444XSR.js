@@ -16,7 +16,6 @@ import {
 } from "/build/_shared/chunk-UY5JWTSU.js";
 import {
   Card,
-  CardContent,
   CardHeader,
   CardTitle
 } from "/build/_shared/chunk-YMUMKUZE.js";
@@ -54,12 +53,9 @@ import {
 } from "/build/_shared/chunk-PNG5AS42.js";
 
 // app/routes/app.apartment-pick.tsx
-var import_react3 = __toESM(require_react(), 1);
+var import_react2 = __toESM(require_react(), 1);
 var import_node = __toESM(require_node(), 1);
 var import_session = __toESM(require_session(), 1);
-
-// app/components/apartments/apartment-pick/apartment-list.tsx
-var import_react = __toESM(require_react(), 1);
 
 // app/components/ui/badge.tsx
 var import_jsx_dev_runtime = __toESM(require_jsx_dev_runtime(), 1);
@@ -133,7 +129,7 @@ if (import.meta) {
     //@ts-expect-error
     "app/components/apartments/apartment-pick/apartment-item.tsx"
   );
-  import.meta.hot.lastModified = "1725532992678.3418";
+  import.meta.hot.lastModified = "1725543319336.9617";
 }
 var ApartmentItem = ({
   apartment,
@@ -143,11 +139,11 @@ var ApartmentItem = ({
   return /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("li", { className: clsx_default("relative mb-4 cursor-pointer transform transition-transform duration-500 ease-in-out rounded-xl", {
     "scale-105 border-2 border-blue-500 shadow-xl": isSelected,
     "hover:scale-105 hover:shadow-2xl": !isSelected
-  }), onClick, children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Card, { className: clsx_default("flex flex-col md:flex-row transition-colors duration-500 ease-in-out", {
+  }), onClick, children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Card, { className: clsx_default("flex flex-row transition-colors duration-500 ease-in-out", {
     "bg-blue-50": isSelected,
     "bg-white": !isSelected
   }), children: [
-    /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "relative md:w-1/3 w-full overflow-hidden rounded-t-lg md:rounded-l-lg md:rounded-tr-none", children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "relative w-1/3 overflow-hidden rounded-t-lg rounded-l-lg rounded-tr-none", children: [
       apartment.image ? /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("img", { src: apartment.image, alt: apartment.name, className: "object-cover h-full w-full transition-transform duration-500 ease-in-out transform hover:scale-105" }, void 0, false, {
         fileName: "app/components/apartments/apartment-pick/apartment-item.tsx",
         lineNumber: 39,
@@ -164,7 +160,7 @@ var ApartmentItem = ({
       /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(Badge, { variant: "outline", className: "absolute top-2 right-2 text-blue-600 bg-blue-50 border-blue-600 transition-opacity duration-300 ease-in-out opacity-90 hover:opacity-100", children: [
         "$",
         apartment.price,
-        " / night"
+        "/night"
       ] }, void 0, true, {
         fileName: "app/components/apartments/apartment-pick/apartment-item.tsx",
         lineNumber: 42,
@@ -175,29 +171,22 @@ var ApartmentItem = ({
       lineNumber: 38,
       columnNumber: 9
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex-1 flex flex-col justify-between p-4", children: [
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(CardHeader, { className: "p-0 mb-2", children: [
-        /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(CardTitle, { className: "text-xl font-bold text-gray-800", children: apartment.name }, void 0, false, {
-          fileName: "app/components/apartments/apartment-pick/apartment-item.tsx",
-          lineNumber: 48,
-          columnNumber: 13
-        }, this),
-        /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "text-gray-500", children: apartment.location }, void 0, false, {
-          fileName: "app/components/apartments/apartment-pick/apartment-item.tsx",
-          lineNumber: 51,
-          columnNumber: 13
-        }, this)
-      ] }, void 0, true, {
+    /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "flex-1 flex flex-col justify-between p-4", children: /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(CardHeader, { className: "p-0 mb-2", children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(CardTitle, { className: "text-xl font-bold text-gray-800", children: apartment.name }, void 0, false, {
         fileName: "app/components/apartments/apartment-pick/apartment-item.tsx",
-        lineNumber: 47,
-        columnNumber: 11
+        lineNumber: 48,
+        columnNumber: 13
       }, this),
-      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)(CardContent, { className: "text-gray-700 p-0" }, void 0, false, {
+      /* @__PURE__ */ (0, import_jsx_dev_runtime2.jsxDEV)("div", { className: "text-gray-500", children: apartment.location }, void 0, false, {
         fileName: "app/components/apartments/apartment-pick/apartment-item.tsx",
-        lineNumber: 53,
-        columnNumber: 11
+        lineNumber: 51,
+        columnNumber: 13
       }, this)
     ] }, void 0, true, {
+      fileName: "app/components/apartments/apartment-pick/apartment-item.tsx",
+      lineNumber: 47,
+      columnNumber: 11
+    }, this) }, void 0, false, {
       fileName: "app/components/apartments/apartment-pick/apartment-item.tsx",
       lineNumber: 46,
       columnNumber: 9
@@ -232,48 +221,43 @@ if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
 }
 var prevRefreshReg;
 var prevRefreshSig;
-var _s = $RefreshSig$();
 if (import.meta) {
   import.meta.hot = createHotContext(
     //@ts-expect-error
     "app/components/apartments/apartment-pick/apartment-list.tsx"
   );
-  import.meta.hot.lastModified = "1725532970990.3296";
+  import.meta.hot.lastModified = "1725543372696.4236";
 }
 var ApartmentList = ({
   apartments,
   onSelect,
   selectedApartment
 }) => {
-  _s();
-  const [selectedApartmentId, setSelectedApartmentId] = (0, import_react.useState)(null);
   const handleSelect = (apartment) => {
-    setSelectedApartmentId(apartment.id);
     onSelect(apartment);
   };
-  return /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("div", { className: "border border-blue-300 p-4 rounded-lg shadow-sm bg-white flex-1 h-full overflow-y-auto", children: apartments.length > 0 ? /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("ul", { className: "w-full h-full", children: apartments.map((apartment) => /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(ApartmentItem, { apartment, isSelected: apartment.id === selectedApartmentId || apartment.id === selectedApartment?.id, onClick: () => handleSelect(apartment) }, apartment.id, false, {
+  return /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("div", { className: "border border-blue-300 p-4 rounded-lg shadow-sm bg-white flex-1 h-full overflow-y-auto", children: apartments.length > 0 ? /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("ul", { className: "w-full h-full", children: apartments.map((apartment) => /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)(ApartmentItem, { apartment, isSelected: apartment.id === selectedApartment?.id, onClick: () => handleSelect(apartment) }, apartment.id, false, {
     fileName: "app/components/apartments/apartment-pick/apartment-list.tsx",
-    lineNumber: 37,
+    lineNumber: 32,
     columnNumber: 40
   }, this)) }, void 0, false, {
     fileName: "app/components/apartments/apartment-pick/apartment-list.tsx",
-    lineNumber: 36,
+    lineNumber: 31,
     columnNumber: 32
   }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("div", { className: "flex items-center justify-center h-full", children: /* @__PURE__ */ (0, import_jsx_dev_runtime3.jsxDEV)("p", { className: "text-gray-500 text-lg", children: "No apartments available" }, void 0, false, {
     fileName: "app/components/apartments/apartment-pick/apartment-list.tsx",
-    lineNumber: 39,
+    lineNumber: 34,
     columnNumber: 11
   }, this) }, void 0, false, {
     fileName: "app/components/apartments/apartment-pick/apartment-list.tsx",
-    lineNumber: 38,
+    lineNumber: 33,
     columnNumber: 17
   }, this) }, void 0, false, {
     fileName: "app/components/apartments/apartment-pick/apartment-list.tsx",
-    lineNumber: 35,
+    lineNumber: 30,
     columnNumber: 10
   }, this);
 };
-_s(ApartmentList, "l98dZos3xpmo7byx501WSYyZtmA=");
 _c3 = ApartmentList;
 var _c3;
 $RefreshReg$(_c3, "ApartmentList");
@@ -349,7 +333,7 @@ window.$RefreshSig$ = prevRefreshSig;
 
 // node_modules/react-day-picker/dist/index.esm.js
 var import_jsx_runtime = __toESM(require_jsx_runtime());
-var import_react2 = __toESM(require_react());
+var import_react = __toESM(require_react());
 
 // node_modules/date-fns/toDate.mjs
 function toDate(argument) {
@@ -2263,7 +2247,7 @@ function parseFromToProps(props) {
     toDate: toDate2 ? startOfDay(toDate2) : void 0
   };
 }
-var DayPickerContext = (0, import_react2.createContext)(void 0);
+var DayPickerContext = (0, import_react.createContext)(void 0);
 function DayPickerProvider(props) {
   var _a;
   var initialProps = props.initialProps;
@@ -2281,7 +2265,7 @@ function DayPickerProvider(props) {
   return (0, import_jsx_runtime.jsx)(DayPickerContext.Provider, { value, children: props.children });
 }
 function useDayPicker() {
-  var context = (0, import_react2.useContext)(DayPickerContext);
+  var context = (0, import_react.useContext)(DayPickerContext);
   if (!context) {
     throw new Error("useDayPicker must be used within a DayPickerProvider.");
   }
@@ -2354,7 +2338,7 @@ function YearsDropdown(props) {
   }) });
 }
 function useControlledValue(defaultValue, controlledValue) {
-  var _a = (0, import_react2.useState)(defaultValue), uncontrolledValue = _a[0], setValue = _a[1];
+  var _a = (0, import_react.useState)(defaultValue), uncontrolledValue = _a[0], setValue = _a[1];
   var value = controlledValue === void 0 ? uncontrolledValue : controlledValue;
   return [value, setValue];
 }
@@ -2431,7 +2415,7 @@ function getPreviousMonth(startingMonth, options) {
   }
   return addMonths(month, -offset);
 }
-var NavigationContext = (0, import_react2.createContext)(void 0);
+var NavigationContext = (0, import_react.createContext)(void 0);
 function NavigationProvider(props) {
   var dayPicker = useDayPicker();
   var _a = useNavigationState(), currentMonth = _a[0], goToMonth = _a[1];
@@ -2465,7 +2449,7 @@ function NavigationProvider(props) {
   return (0, import_jsx_runtime.jsx)(NavigationContext.Provider, { value, children: props.children });
 }
 function useNavigation() {
-  var context = (0, import_react2.useContext)(NavigationContext);
+  var context = (0, import_react.useContext)(NavigationContext);
   if (!context) {
     throw new Error("useNavigation must be used within a NavigationProvider");
   }
@@ -2488,7 +2472,7 @@ function IconLeft(props) {
 function IconRight(props) {
   return (0, import_jsx_runtime.jsx)("svg", __assign({ width: "16px", height: "16px", viewBox: "0 0 120 120" }, props, { children: (0, import_jsx_runtime.jsx)("path", { d: "M49.8040405,3.34314575 C46.6798462,0.218951416 41.6145263,0.218951416 38.490332,3.34314575 C35.4326099,6.40086786 35.367552,11.3179931 38.2951583,14.4548388 L38.490332,14.6568542 L83.8333725,60 L38.490332,105.343146 C35.4326099,108.400868 35.367552,113.317993 38.2951583,116.454839 L38.490332,116.656854 C41.5480541,119.714576 46.4651794,119.779634 49.602025,116.852028 L49.8040405,116.656854 L100.804041,65.6568542 C103.861763,62.5991321 103.926821,57.6820069 100.999214,54.5451612 L100.804041,54.3431458 L49.8040405,3.34314575 Z", fill: "currentColor" }) }));
 }
-var Button2 = (0, import_react2.forwardRef)(function(props, ref) {
+var Button2 = (0, import_react.forwardRef)(function(props, ref) {
   var _a = useDayPicker(), classNames = _a.classNames, styles = _a.styles;
   var classNamesArr = [classNames.button_reset, classNames.button];
   if (props.className) {
@@ -2591,7 +2575,7 @@ function DayContent(props) {
   var _a = useDayPicker(), locale = _a.locale, formatDay2 = _a.formatters.formatDay;
   return (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: formatDay2(props.date, { locale }) });
 }
-var SelectMultipleContext = (0, import_react2.createContext)(void 0);
+var SelectMultipleContext = (0, import_react.createContext)(void 0);
 function SelectMultipleProvider(props) {
   if (!isDayPickerMultiple(props.initialProps)) {
     var emptyContextValue = {
@@ -2649,7 +2633,7 @@ function SelectMultipleProviderInternal(_a) {
   return (0, import_jsx_runtime.jsx)(SelectMultipleContext.Provider, { value: contextValue, children });
 }
 function useSelectMultiple() {
-  var context = (0, import_react2.useContext)(SelectMultipleContext);
+  var context = (0, import_react.useContext)(SelectMultipleContext);
   if (!context) {
     throw new Error("useSelectMultiple must be used within a SelectMultipleProvider");
   }
@@ -2686,7 +2670,7 @@ function addToRange(day, range) {
   }
   return { from: day, to: void 0 };
 }
-var SelectRangeContext = (0, import_react2.createContext)(void 0);
+var SelectRangeContext = (0, import_react.createContext)(void 0);
 function SelectRangeProvider(props) {
   if (!isDayPickerRange(props.initialProps)) {
     var emptyContextValue = {
@@ -2790,7 +2774,7 @@ function SelectRangeProviderInternal(_a) {
   return (0, import_jsx_runtime.jsx)(SelectRangeContext.Provider, { value: { selected, onDayClick, modifiers }, children });
 }
 function useSelectRange() {
-  var context = (0, import_react2.useContext)(SelectRangeContext);
+  var context = (0, import_react.useContext)(SelectRangeContext);
   if (!context) {
     throw new Error("useSelectRange must be used within a SelectRangeProvider");
   }
@@ -2851,7 +2835,7 @@ function getInternalModifiers(dayPicker, selectMultiple, selectRange) {
   }
   return internalModifiers;
 }
-var ModifiersContext = (0, import_react2.createContext)(void 0);
+var ModifiersContext = (0, import_react.createContext)(void 0);
 function ModifiersProvider(props) {
   var dayPicker = useDayPicker();
   var selectMultiple = useSelectMultiple();
@@ -2862,7 +2846,7 @@ function ModifiersProvider(props) {
   return (0, import_jsx_runtime.jsx)(ModifiersContext.Provider, { value: modifiers, children: props.children });
 }
 function useModifiers() {
-  var context = (0, import_react2.useContext)(ModifiersContext);
+  var context = (0, import_react.useContext)(ModifiersContext);
   if (!context) {
     throw new Error("useModifiers must be used within a ModifiersProvider");
   }
@@ -3038,12 +3022,12 @@ function getNextFocus(focusedDay, options) {
     });
   }
 }
-var FocusContext = (0, import_react2.createContext)(void 0);
+var FocusContext = (0, import_react.createContext)(void 0);
 function FocusProvider(props) {
   var navigation = useNavigation();
   var modifiers = useModifiers();
-  var _a = (0, import_react2.useState)(), focusedDay = _a[0], setFocusedDay = _a[1];
-  var _b = (0, import_react2.useState)(), lastFocused = _b[0], setLastFocused = _b[1];
+  var _a = (0, import_react.useState)(), focusedDay = _a[0], setFocusedDay = _a[1];
+  var _b = (0, import_react.useState)(), lastFocused = _b[0], setLastFocused = _b[1];
   var initialFocusTarget = getInitialFocusTarget(navigation.displayMonths, modifiers);
   var focusTarget = (focusedDay !== null && focusedDay !== void 0 ? focusedDay : lastFocused && navigation.isDateDisplayed(lastFocused)) ? lastFocused : initialFocusTarget;
   var blur = function() {
@@ -3107,7 +3091,7 @@ function FocusProvider(props) {
   return (0, import_jsx_runtime.jsx)(FocusContext.Provider, { value, children: props.children });
 }
 function useFocusContext() {
-  var context = (0, import_react2.useContext)(FocusContext);
+  var context = (0, import_react.useContext)(FocusContext);
   if (!context) {
     throw new Error("useFocusContext must be used within a FocusProvider");
   }
@@ -3118,7 +3102,7 @@ function useActiveModifiers(day, displayMonth) {
   var activeModifiers = getActiveModifiers(day, modifiers, displayMonth);
   return activeModifiers;
 }
-var SelectSingleContext = (0, import_react2.createContext)(void 0);
+var SelectSingleContext = (0, import_react.createContext)(void 0);
 function SelectSingleProvider(props) {
   if (!isDayPickerSingle(props.initialProps)) {
     var emptyContextValue = {
@@ -3146,7 +3130,7 @@ function SelectSingleProviderInternal(_a) {
   return (0, import_jsx_runtime.jsx)(SelectSingleContext.Provider, { value: contextValue, children });
 }
 function useSelectSingle() {
-  var context = (0, import_react2.useContext)(SelectSingleContext);
+  var context = (0, import_react.useContext)(SelectSingleContext);
   if (!context) {
     throw new Error("useSelectSingle must be used within a SelectSingleProvider");
   }
@@ -3322,7 +3306,7 @@ function useDayRender(day, displayMonth, buttonRef) {
   var eventHandlers = useDayEventHandlers(day, activeModifiers);
   var selectedDays = useSelectedDays();
   var isButton = Boolean(dayPicker.onDayClick || dayPicker.mode !== "default");
-  (0, import_react2.useEffect)(function() {
+  (0, import_react.useEffect)(function() {
     var _a2;
     if (activeModifiers.outside)
       return;
@@ -3365,7 +3349,7 @@ function useDayRender(day, displayMonth, buttonRef) {
   return dayRender;
 }
 function Day(props) {
-  var buttonRef = (0, import_react2.useRef)(null);
+  var buttonRef = (0, import_react.useRef)(null);
   var dayRender = useDayRender(props.date, props.displayMonth, buttonRef);
   if (dayRender.isHidden) {
     return (0, import_jsx_runtime.jsx)("div", { role: "gridcell" });
@@ -3460,7 +3444,7 @@ function Table(props) {
 function canUseDOM() {
   return !!(typeof window !== "undefined" && window.document && window.document.createElement);
 }
-var useIsomorphicLayoutEffect = canUseDOM() ? import_react2.useLayoutEffect : import_react2.useEffect;
+var useIsomorphicLayoutEffect = canUseDOM() ? import_react.useLayoutEffect : import_react.useEffect;
 var serverHandoffComplete = false;
 var id = 0;
 function genId() {
@@ -3469,13 +3453,13 @@ function genId() {
 function useId(providedId) {
   var _a;
   var initialId = providedId !== null && providedId !== void 0 ? providedId : serverHandoffComplete ? genId() : null;
-  var _b = (0, import_react2.useState)(initialId), id2 = _b[0], setId = _b[1];
+  var _b = (0, import_react.useState)(initialId), id2 = _b[0], setId = _b[1];
   useIsomorphicLayoutEffect(function() {
     if (id2 === null) {
       setId(genId());
     }
   }, []);
-  (0, import_react2.useEffect)(function() {
+  (0, import_react.useEffect)(function() {
     if (serverHandoffComplete === false) {
       serverHandoffComplete = true;
     }
@@ -3523,8 +3507,8 @@ function Root(_a) {
   var dayPicker = useDayPicker();
   var focusContext = useFocusContext();
   var navigation = useNavigation();
-  var _d = (0, import_react2.useState)(false), hasInitialFocus = _d[0], setHasInitialFocus = _d[1];
-  (0, import_react2.useEffect)(function() {
+  var _d = (0, import_react.useState)(false), hasInitialFocus = _d[0], setHasInitialFocus = _d[1];
+  (0, import_react.useEffect)(function() {
     if (!dayPicker.initialFocus)
       return;
     if (!focusContext.focusTarget)
@@ -3879,7 +3863,7 @@ if (!window.$RefreshReg$ || !window.$RefreshSig$ || !window.$RefreshRuntime$) {
 }
 var prevRefreshReg;
 var prevRefreshSig;
-var _s2 = $RefreshSig$();
+var _s = $RefreshSig$();
 if (import.meta) {
   import.meta.hot = createHotContext(
     //@ts-expect-error
@@ -3888,7 +3872,7 @@ if (import.meta) {
   import.meta.hot.lastModified = "1725533718808.4587";
 }
 function ApartmentPickPage() {
-  _s2();
+  _s();
   const submit = useSubmit();
   const {
     toast
@@ -3902,8 +3886,8 @@ function ApartmentPickPage() {
     loading,
     error
   } = useGetApartments();
-  const [selectedApartment, setSelectedApartment] = (0, import_react3.useState)(initialApartment);
-  const [selectedDates, setSelectedDates] = (0, import_react3.useState)(initialDate);
+  const [selectedApartment, setSelectedApartment] = (0, import_react2.useState)(initialApartment);
+  const [selectedDates, setSelectedDates] = (0, import_react2.useState)(initialDate);
   const handleSelectApartment = (apartment) => {
     setSelectedApartment(apartment);
   };
@@ -3981,7 +3965,7 @@ function ApartmentPickPage() {
     columnNumber: 10
   }, this);
 }
-_s2(ApartmentPickPage, "emAuJf09Ejrq1ddvzzjiD4F6at0=", false, function() {
+_s(ApartmentPickPage, "emAuJf09Ejrq1ddvzzjiD4F6at0=", false, function() {
   return [useSubmit, useToast, useLoaderData, useGetApartments];
 });
 _c8 = ApartmentPickPage;
@@ -3992,4 +3976,4 @@ window.$RefreshSig$ = prevRefreshSig;
 export {
   ApartmentPickPage as default
 };
-//# sourceMappingURL=/build/routes/app.apartment-pick-KID73267.js.map
+//# sourceMappingURL=/build/routes/app.apartment-pick-UW444XSR.js.map
