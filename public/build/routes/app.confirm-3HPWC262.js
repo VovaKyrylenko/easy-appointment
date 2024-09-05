@@ -105,7 +105,7 @@ if (import.meta) {
     //@ts-expect-error
     "app/routes/app.confirm.tsx"
   );
-  import.meta.hot.lastModified = "1725543672372.775";
+  import.meta.hot.lastModified = "1725544806654.819";
 }
 function ConfirmBooking() {
   _s();
@@ -307,7 +307,7 @@ function ConfirmBooking() {
       lineNumber: 83,
       columnNumber: 9
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex mt-6 space-x-2", children: [
+    /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "flex mt-6 w-full justify-between", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Button, { type: "button", disabled: isSubmitting, children: isSubmitting ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(import_jsx_dev_runtime.Fragment, { children: [
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(LoaderCircle, { className: "mr-2 h-4 w-4 animate-spin" }, void 0, false, {
           fileName: "app/routes/app.confirm.tsx",
@@ -346,12 +346,12 @@ function ConfirmBooking() {
         fileName: "app/routes/app.confirm.tsx",
         lineNumber: 127,
         columnNumber: 29
-      }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, { to: "/app/success", children: [
-        "Confirm Booking",
+      }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, { to: "/app/success", className: "flex", children: [
+        "Confirm Booking ",
         /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Check, { className: "ml-2 h-5 w-5" }, void 0, false, {
           fileName: "app/routes/app.confirm.tsx",
-          lineNumber: 131,
-          columnNumber: 17
+          lineNumber: 130,
+          columnNumber: 33
         }, this)
       ] }, void 0, true, {
         fileName: "app/routes/app.confirm.tsx",
@@ -388,4 +388,4 @@ window.$RefreshSig$ = prevRefreshSig;
 export {
   ConfirmBooking as default
 };
-//# sourceMappingURL=/build/routes/app.confirm-WDODMUFT.js.map
+//# sourceMappingURL=/build/routes/app.confirm-3HPWC262.js.map

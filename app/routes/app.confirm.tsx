@@ -104,7 +104,7 @@ export default function ConfirmBooking() {
           </div>
         </div>
 
-        <div className="flex mt-6 space-x-2">
+        <div className="flex mt-6 w-full justify-between">
           <Button type="button" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
@@ -126,9 +126,8 @@ export default function ConfirmBooking() {
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
               </>
             ) : (
-              <Link to="/app/success">
-                Confirm Booking
-                <Check className="ml-2 h-5 w-5" />
+              <Link to="/app/success" className="flex">
+                Confirm Booking <Check className="ml-2 h-5 w-5" />
               </Link>
             )}
           </Button>
