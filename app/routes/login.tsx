@@ -1,15 +1,14 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Form, json, useActionData } from "@remix-run/react";
+import { Form, json, useActionData, useNavigation } from "@remix-run/react";
 import { authenticator } from "~/services/auth.server";
 import { loginFormSchema } from "~/validation/login-form";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
+import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertTitle, Alert } from "~/components/ui/alert";
 import { ZodError } from "zod";
 import { AuthorizationError } from "remix-auth";
-import { AlertCircle } from "lucide-react";
-import { AlertTitle, Alert } from "~/components/ui/alert";
-import { useNavigation } from "@remix-run/react";
 
 export default function Login() {
   const actionData = useActionData<typeof action>();
@@ -45,7 +44,6 @@ export default function Login() {
                 name="password"
                 type="password"
                 placeholder="Password"
-                autoComplete="current-password"
                 className={`w-full ${
                   actionData?.errors?.password ? "border-red-500" : ""
                 }`}
@@ -70,7 +68,13 @@ export default function Login() {
               className="w-full mt-4"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Signing In..." : "Sign In"}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                </>
+              ) : (
+                <>Log In</>
+              )}
             </Button>
           </Form>
         </CardContent>
