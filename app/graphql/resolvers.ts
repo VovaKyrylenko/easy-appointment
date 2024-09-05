@@ -80,6 +80,9 @@ export const resolvers = {
             userPhone,
             userEmail,
           },
+          include: {
+            apartment: true,
+          },
         });
       } catch (error) {
         throw new ApolloError("Failed to create booking");
