@@ -1,52 +1,30 @@
-import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useLoaderData, useNavigation } from "@remix-run/react";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@remix-run/node";
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { ZodError } from "zod";
 import { userDataFormSchema } from "~/validation/user-data-form";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { commitSession, getSession } from "~/services/session.server";
-
-export const loader = async ({ request }: { request: Request }) => {
-  const session = await getSession(request.headers.get("Cookie"));
-  const userDetails = session.get("userData");
-
-  return json({ userDetails });
-};
-
-export const action = async ({ request }: { request: Request }) => {
-  const formData = new URLSearchParams(await request.text());
-  const data = Object.fromEntries(formData);
-  const errors: Record<string, string> = {};
-
-  try {
-    userDataFormSchema.parse(data);
-    const session = await getSession(request.headers.get("Cookie"));
-    session.set("userData", data);
-
-    return redirect("/app/confirm", {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
-    });
-  } catch (error) {
-    if (error instanceof ZodError) {
-      error.errors.forEach((err) => {
-        if (err.path.length) {
-          errors[err.path[0]] = err.message;
-        }
-      });
-    }
-    return json({ errors });
-  }
-};
 
 export default function UserDetailsForm() {
   const actionData = useActionData<typeof action>();
   const transition = useNavigation();
-  const {userDetails} = useLoaderData<typeof loader>()
+  const { userData } = useLoaderData<typeof loader>();
 
+  const isSubmitting = transition.state !== "idle";
   return (
     <div className="flex items-center justify-center flex-1">
       <div className="flex flex-col items-center w-full max-w-lg">
@@ -60,7 +38,7 @@ export default function UserDetailsForm() {
               type="text"
               placeholder="John Doe"
               className="mt-2"
-              value={userDetails.userName}
+              defaultValue={userData?.userName}
             />
             {actionData?.errors?.userName && (
               <p className="text-red-500 text-sm pt-2">
@@ -76,7 +54,7 @@ export default function UserDetailsForm() {
               type="tel"
               placeholder="+1234567890"
               className="mt-2"
-              value={userDetails.userPhone}
+              defaultValue={userData?.userPhone}
             />
             {actionData?.errors?.userPhone && (
               <p className="text-red-500 text-sm pt-2">
@@ -92,7 +70,7 @@ export default function UserDetailsForm() {
               type="email"
               placeholder="you@example.com"
               className="mt-2"
-              value={userDetails.userEmail}
+              defaultValue={userData?.userEmail}
             />
             {actionData?.errors?.userEmail && (
               <p className="text-red-500 text-sm pt-2">
@@ -101,22 +79,28 @@ export default function UserDetailsForm() {
             )}
           </div>
           <div className="w-full flex justify-between">
-            <Button
-              type="button"
-              size="lg"
-              disabled={transition.state !== "idle"}
-            >
-              <Link to="/app/apartment-pick" className="flex items-center">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back
-              </Link>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                </>
+              ) : (
+                <Link to="/app/apartment-pick" className="flex items-center">
+                  <ArrowLeft className="mr-2 h-4 w-4" /> Back
+                </Link>
+              )}
             </Button>
-            <Button
-              type="submit"
-              size="lg"
-              disabled={transition.state !== "idle"}
-            >
-              Next
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+                </>
+              ) : (
+                <>
+                  Next
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
             </Button>
           </div>
         </Form>
@@ -124,3 +108,40 @@ export default function UserDetailsForm() {
     </div>
   );
 }
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  const userData = session.get("userData");
+
+  return json({ userData });
+};
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+  const userName = formData.get("userName");
+  const userEmail = formData.get("userEmail");
+  const userPhone = formData.get("userPhone");
+  const errors: Record<string, string> = {};
+
+  try {
+    userDataFormSchema.parse({ userName, userPhone, userEmail });
+    const session = await getSession(request.headers.get("Cookie"));
+    session.set("userData", { userName, userPhone, userEmail });
+
+    return redirect("/app/confirm", {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    if (error instanceof ZodError) {
+      error.errors.forEach((err) => {
+        if (err.path.length) {
+          errors[err.path[0]] = err.message;
+        }
+      });
+    }
+    return json({ errors });
+  }
+};
