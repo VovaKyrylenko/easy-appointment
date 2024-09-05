@@ -1,29 +1,25 @@
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useNavigation } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
-import { json } from "@remix-run/node";
-import { getSession } from "~/services/session.server";
-import { ArrowLeft, Check } from "lucide-react";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@remix-run/node";
+import { destroySession, getSession } from "~/services/session.server";
+import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import { useCreateBooking } from "~/hooks/use-create-booking";
 
-export const loader = async ({ request }: { request: Request }) => {
-  const session = await getSession(request.headers.get("Cookie"));
-  const apartment = session.get("apartment");
-  const dates = session.get("date");
-  const userDetails = session.get("userData");
+export default function ConfirmBooking() {
+  const { apartment, dates, userData } = useLoaderData<typeof loader>();
+  const { createBooking, error } = useCreateBooking();
+  const transition = useNavigation();
 
-  return json({ apartment, dates, userDetails });
-};
-
-export default function BookingSummary() {
-  const { apartment, dates, userDetails } = useLoaderData<typeof loader>();
-  const { createBooking, data, loading, error } = useCreateBooking();
-  if (!apartment || !dates?.from || !dates?.to || !userDetails) {
+  if (!apartment || !dates?.from || !dates?.to || !userData) {
     return (
       <p>Something went wrong. Please go back and fill in all the details.</p>
     );
   }
-
-  const { userName, userPhone, userEmail } = userDetails;
 
   const calculateTotalPrice = () => {
     const startDate = new Date(dates.from);
@@ -35,17 +31,30 @@ export default function BookingSummary() {
   };
 
   const handleConfirmBooking = async () => {
-    await createBooking({
-      variables: {
-        apartmentId: apartment.id,
-        startDate: dates.from,
-        endDate: dates.to,
-        userName: userDetails.userName,
-        userPhone: userDetails.userPhone,
-        userEmail: userDetails.userEmail,
-      },
-    });
+    try {
+      await createBooking({
+        variables: {
+          apartmentId: apartment.id,
+          startDate: dates.from,
+          endDate: dates.to,
+          userName: userData.userName,
+          userPhone: userData.userPhone,
+          userEmail: userData.userEmail,
+        },
+      });
+       await fetch("/app/confirm", {
+         method: "POST",
+         headers: {
+           "Content-Type": "application/json",
+           "X-Remix-Action": "destroy-session",
+         },
+       });
+    } catch (error) {
+      console.error("Booking creation failed:", error);
+    }
   };
+
+  const isSubmitting = transition.state !== "idle";
 
   return (
     <div className="flex items-center justify-center flex-1">
@@ -54,18 +63,24 @@ export default function BookingSummary() {
           Booking Summary
         </h2>
 
+        {error && (
+          <p className="text-red-500 text-center">
+            Failed to create booking: {error.message}
+          </p>
+        )}
+
         <div className="space-y-4">
           <div className="flex justify-between">
             <span className="font-medium">Name:</span>
-            <span>{userName}</span>
+            <span>{userData.userName}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Phone:</span>
-            <span>{userPhone}</span>
+            <span>{userData.userPhone}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Email:</span>
-            <span>{userEmail}</span>
+            <span>{userData.userEmail}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Apartment:</span>
@@ -90,16 +105,54 @@ export default function BookingSummary() {
         </div>
 
         <div className="flex mt-6 space-x-2">
-          <Link to="/app/user-data" className="w-full">
-            <Button size="lg">
-              <ArrowLeft className="mr-2 h-5 w-5" /> Back
-            </Button>
-          </Link>
-          <Button size="lg" onClick={handleConfirmBooking}>
-            Confirm Booking <Check className="ml-2 h-5 w-5" />
+          <Button type="button" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+              </>
+            ) : (
+              <Link to="/app/user-data" className="flex items-center">
+                <ArrowLeft className="mr-2 h-4 w-4" /> Back
+              </Link>
+            )}
+          </Button>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            onClick={handleConfirmBooking}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+              </>
+            ) : (
+              <Link to="/app/success">
+                Confirm Booking
+                <Check className="ml-2 h-5 w-5" />
+              </Link>
+            )}
           </Button>
         </div>
       </div>
     </div>
   );
 }
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  const apartment = session.get("apartment");
+  const dates = session.get("date");
+  const userData = session.get("userData");
+
+  return json({ apartment, dates, userData });
+};
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  if (session) {
+    return redirect("/app/success", {
+      headers: { "Set-Cookie":  await destroySession(session) },
+    });
+  }
+};
