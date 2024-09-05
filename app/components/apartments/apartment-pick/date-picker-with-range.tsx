@@ -1,11 +1,10 @@
 import { DateRange } from "react-day-picker";
 import { cn } from "~/lib/utils";
 import { Calendar } from "~/components/ui/calendar";
-import { useState } from "react";
 
 interface DatePickerWithRangeProps {
-  onChange: (start: Date | null, end: Date | null) => void;
-  selectedDates: DateRange | null;
+  onChange: (range: DateRange | undefined) => void;
+  selectedDates: DateRange | undefined;
   bookedDates: DateRange[] | undefined;
 }
 
@@ -14,34 +13,53 @@ export const DatePickerWithRange = ({
   selectedDates,
   bookedDates,
 }: DatePickerWithRangeProps) => {
-  const [date, setDate] = useState<DateRange | undefined>(undefined);
 
-  const today = new Date();
+  const handleDateChange = (newDate: DateRange | undefined) => {
+    if (!newDate) {
+      onChange(undefined);
+      return;
+    }
+    const { from, to } = newDate;
+    if (from && isDateDisabled(from)) {
+      return;
+    }
+
+    let adjustedTo = to;
+    if (to && from) {
+      let current = new Date(from);
+      current.setDate(current.getDate() + 1); 
+
+      while (current <= to) {
+        if (isDateDisabled(current)) {
+          adjustedTo = new Date(current);
+          adjustedTo.setDate(adjustedTo.getDate() - 1);
+          break;
+        }
+        current.setDate(current.getDate() + 1);
+      }
+    }
+    if (from && adjustedTo && adjustedTo < from) {
+      return;
+    }
+    onChange({ from, to: adjustedTo });
+  };
 
   const isDateDisabled = (date: Date) => {
+    const today = new Date();
     if (date < today) return true;
+
     if (bookedDates) {
       for (const bookedRange of bookedDates) {
         if (bookedRange.from && bookedRange.to) {
-          if (
-            date >= new Date(bookedRange.from) &&
-            date <= new Date(bookedRange.to)
-          ) {
+          const bookedFrom = new Date(bookedRange.from);
+          const bookedTo = new Date(bookedRange.to);
+          if (date >= bookedFrom && date <= bookedTo) {
             return true;
           }
         }
       }
     }
     return false;
-  };
-
-  const handleDateChange = (newDate: DateRange | undefined) => {
-    setDate(newDate);
-    if (newDate?.from && newDate?.to) {
-      onChange(newDate.from, newDate.to);
-    } else {
-      onChange(null, null);
-    }
   };
 
   return (
@@ -54,8 +72,8 @@ export const DatePickerWithRange = ({
         <Calendar
           mode="range"
           className="h-full w-full flex"
-          defaultMonth={date?.from}
-          selected={selectedDates ?? date}
+          defaultMonth={selectedDates?.from}
+          selected={selectedDates}
           onSelect={handleDateChange}
           disabled={isDateDisabled}
           classNames={{
