@@ -15,14 +15,17 @@ import {
   require_session
 } from "/build/_shared/chunk-UY5JWTSU.js";
 import {
+  Alert,
+  AlertTitle,
   Card,
   CardHeader,
   CardTitle
-} from "/build/_shared/chunk-YMUMKUZE.js";
+} from "/build/_shared/chunk-UFE3VKFV.js";
 import {
   ArrowRight,
   Button,
   ImageOff,
+  LoaderCircle,
   buttonVariants
 } from "/build/_shared/chunk-7NJH6SRP.js";
 import {
@@ -35,6 +38,7 @@ import {
 } from "/build/_shared/chunk-B43JI2TA.js";
 import {
   useLoaderData,
+  useNavigation,
   useSubmit
 } from "/build/_shared/chunk-GBNPHAJX.js";
 import "/build/_shared/chunk-U4FRFQSK.js";
@@ -2448,7 +2452,7 @@ function NavigationProvider(props) {
   };
   return (0, import_jsx_runtime.jsx)(NavigationContext.Provider, { value, children: props.children });
 }
-function useNavigation() {
+function useNavigation2() {
   var context = (0, import_react.useContext)(NavigationContext);
   if (!context) {
     throw new Error("useNavigation must be used within a NavigationProvider");
@@ -2458,7 +2462,7 @@ function useNavigation() {
 function CaptionDropdowns(props) {
   var _a;
   var _b = useDayPicker(), classNames = _b.classNames, styles = _b.styles, components = _b.components;
-  var goToMonth = useNavigation().goToMonth;
+  var goToMonth = useNavigation2().goToMonth;
   var handleMonthChange = function(newMonth) {
     goToMonth(addMonths(newMonth, props.displayIndex ? -props.displayIndex : 0));
   };
@@ -2507,7 +2511,7 @@ function Navigation(props) {
 }
 function CaptionNavigation(props) {
   var numberOfMonths = useDayPicker().numberOfMonths;
-  var _a = useNavigation(), previousMonth = _a.previousMonth, nextMonth = _a.nextMonth, goToMonth = _a.goToMonth, displayMonths = _a.displayMonths;
+  var _a = useNavigation2(), previousMonth = _a.previousMonth, nextMonth = _a.nextMonth, goToMonth = _a.goToMonth, displayMonths = _a.displayMonths;
   var displayIndex = displayMonths.findIndex(function(month) {
     return isSameMonth(props.displayMonth, month);
   });
@@ -3024,7 +3028,7 @@ function getNextFocus(focusedDay, options) {
 }
 var FocusContext = (0, import_react.createContext)(void 0);
 function FocusProvider(props) {
-  var navigation = useNavigation();
+  var navigation = useNavigation2();
   var modifiers = useModifiers();
   var _a = (0, import_react.useState)(), focusedDay = _a[0], setFocusedDay = _a[1];
   var _b = (0, import_react.useState)(), lastFocused = _b[0], setLastFocused = _b[1];
@@ -3471,7 +3475,7 @@ function Month(props) {
   var _b;
   var dayPicker = useDayPicker();
   var dir = dayPicker.dir, classNames = dayPicker.classNames, styles = dayPicker.styles, components = dayPicker.components;
-  var displayMonths = useNavigation().displayMonths;
+  var displayMonths = useNavigation2().displayMonths;
   var captionId = useId(dayPicker.id ? "".concat(dayPicker.id, "-").concat(props.displayIndex) : void 0);
   var tableId = dayPicker.id ? "".concat(dayPicker.id, "-grid-").concat(props.displayIndex) : void 0;
   var className = [classNames.month];
@@ -3506,7 +3510,7 @@ function Root(_a) {
   var initialProps = _a.initialProps;
   var dayPicker = useDayPicker();
   var focusContext = useFocusContext();
-  var navigation = useNavigation();
+  var navigation = useNavigation2();
   var _d = (0, import_react.useState)(false), hasInitialFocus = _d[0], setHasInitialFocus = _d[1];
   (0, import_react.useEffect)(function() {
     if (!dayPicker.initialFocus)
@@ -3869,7 +3873,7 @@ if (import.meta) {
     //@ts-expect-error
     "app/routes/app.apartment-pick.tsx"
   );
-  import.meta.hot.lastModified = "1725533718808.4587";
+  import.meta.hot.lastModified = "1725544158814.6218";
 }
 function ApartmentPickPage() {
   _s();
@@ -3877,6 +3881,8 @@ function ApartmentPickPage() {
   const {
     toast
   } = useToast();
+  const transition = useNavigation();
+  const isSubmitting = transition.state !== "idle";
   const {
     initialApartment,
     initialDate
@@ -3910,18 +3916,46 @@ function ApartmentPickPage() {
       method: "post"
     });
   };
-  if (loading)
-    return /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("p", { children: "Loading..." }, void 0, false, {
+  if (loading) {
+    return /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "flex items-center justify-center h-full flex-1", children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(LoaderCircle, {}, void 0, false, {
+        fileName: "app/routes/app.apartment-pick.tsx",
+        lineNumber: 76,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("p", { className: "ml-4 text-gray-600", children: "Loading apartments..." }, void 0, false, {
+        fileName: "app/routes/app.apartment-pick.tsx",
+        lineNumber: 77,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
       fileName: "app/routes/app.apartment-pick.tsx",
-      lineNumber: 71,
-      columnNumber: 23
+      lineNumber: 75,
+      columnNumber: 12
     }, this);
-  if (error)
-    return /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("p", { children: "Error fetching apartments!" }, void 0, false, {
+  }
+  if (error) {
+    return /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "flex items-center justify-center h-full", children: /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(Alert, { variant: "destructive", children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(AlertTitle, { children: "Error fetching apartments!" }, void 0, false, {
+        fileName: "app/routes/app.apartment-pick.tsx",
+        lineNumber: 83,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("p", { children: error.message || "An unknown error occurred." }, void 0, false, {
+        fileName: "app/routes/app.apartment-pick.tsx",
+        lineNumber: 84,
+        columnNumber: 11
+      }, this)
+    ] }, void 0, true, {
       fileName: "app/routes/app.apartment-pick.tsx",
-      lineNumber: 72,
-      columnNumber: 21
+      lineNumber: 82,
+      columnNumber: 9
+    }, this) }, void 0, false, {
+      fileName: "app/routes/app.apartment-pick.tsx",
+      lineNumber: 81,
+      columnNumber: 12
     }, this);
+  }
   const bookedDates = selectedApartment?.bookings?.map((booking) => ({
     from: new Date(Number(booking.startDate)),
     to: new Date(Number(booking.endDate))
@@ -3930,43 +3964,58 @@ function ApartmentPickPage() {
     /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "flex-1 grid grid-cols-1 md:grid-cols-2 gap-8", children: [
       /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(ApartmentSelectionSection, { apartments, onSelect: handleSelectApartment, selectedApartment }, void 0, false, {
         fileName: "app/routes/app.apartment-pick.tsx",
-        lineNumber: 79,
+        lineNumber: 94,
         columnNumber: 9
       }, this),
       /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(DateSelectionSection, { onChange: handleDatesChange, selectedDates, bookedDates }, void 0, false, {
         fileName: "app/routes/app.apartment-pick.tsx",
-        lineNumber: 80,
+        lineNumber: 95,
         columnNumber: 9
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/app.apartment-pick.tsx",
-      lineNumber: 78,
+      lineNumber: 93,
       columnNumber: 7
     }, this),
-    /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "flex justify-end mt-4", children: /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(Button, { size: "lg", onClick: handleSaveApartmentAndDate, disabled: !selectedApartment || !selectedDates?.from || !selectedDates?.to, children: [
-      "Next ",
+    /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)("div", { className: "flex justify-end mt-4", children: /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(Button, { type: "submit", disabled: isSubmitting, onClick: handleSaveApartmentAndDate, children: isSubmitting ? /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(import_jsx_dev_runtime8.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(LoaderCircle, { className: "mr-2 h-4 w-4 animate-spin" }, void 0, false, {
+        fileName: "app/routes/app.apartment-pick.tsx",
+        lineNumber: 100,
+        columnNumber: 15
+      }, this),
+      " Please wait"
+    ] }, void 0, true, {
+      fileName: "app/routes/app.apartment-pick.tsx",
+      lineNumber: 99,
+      columnNumber: 27
+    }, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(import_jsx_dev_runtime8.Fragment, { children: [
+      "Next",
       /* @__PURE__ */ (0, import_jsx_dev_runtime8.jsxDEV)(ArrowRight, { className: "ml-2 h-4 w-4" }, void 0, false, {
         fileName: "app/routes/app.apartment-pick.tsx",
-        lineNumber: 84,
-        columnNumber: 16
+        lineNumber: 103,
+        columnNumber: 15
       }, this)
     ] }, void 0, true, {
       fileName: "app/routes/app.apartment-pick.tsx",
-      lineNumber: 83,
+      lineNumber: 101,
+      columnNumber: 19
+    }, this) }, void 0, false, {
+      fileName: "app/routes/app.apartment-pick.tsx",
+      lineNumber: 98,
       columnNumber: 9
     }, this) }, void 0, false, {
       fileName: "app/routes/app.apartment-pick.tsx",
-      lineNumber: 82,
+      lineNumber: 97,
       columnNumber: 7
     }, this)
   ] }, void 0, true, {
     fileName: "app/routes/app.apartment-pick.tsx",
-    lineNumber: 77,
+    lineNumber: 92,
     columnNumber: 10
   }, this);
 }
-_s(ApartmentPickPage, "emAuJf09Ejrq1ddvzzjiD4F6at0=", false, function() {
-  return [useSubmit, useToast, useLoaderData, useGetApartments];
+_s(ApartmentPickPage, "j1FbtPAVlTLRYvU4m/yVaDk6YcM=", false, function() {
+  return [useSubmit, useToast, useNavigation, useLoaderData, useGetApartments];
 });
 _c8 = ApartmentPickPage;
 var _c8;
@@ -3976,4 +4025,4 @@ window.$RefreshSig$ = prevRefreshSig;
 export {
   ApartmentPickPage as default
 };
-//# sourceMappingURL=/build/routes/app.apartment-pick-UW444XSR.js.map
+//# sourceMappingURL=/build/routes/app.apartment-pick-MYRKFY4X.js.map

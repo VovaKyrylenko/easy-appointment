@@ -490,6 +490,9 @@ body {
 .ml-2 {
   margin-left: 0.5rem;
 }
+.ml-4 {
+  margin-left: 1rem;
+}
 .mr-2 {
   margin-right: 0.5rem;
 }
@@ -556,6 +559,9 @@ body {
 .min-h-screen {
   min-height: 100vh;
 }
+.w-1\/3 {
+  width: 33.333333%;
+}
 .w-12 {
   width: 3rem;
 }
@@ -582,9 +588,6 @@ body {
 }
 .w-full {
   width: 100%;
-}
-.w-1\/3 {
-  width: 33.333333%;
 }
 .min-w-0 {
   min-width: 0px;
@@ -725,6 +728,10 @@ body {
 .rounded-xl {
   border-radius: 0.75rem;
 }
+.rounded-l-lg {
+  border-top-left-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
+}
 .rounded-t-lg {
   border-top-left-radius: var(--radius);
   border-top-right-radius: var(--radius);
@@ -732,10 +739,6 @@ body {
 .rounded-t-none {
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
-}
-.rounded-l-lg {
-  border-top-left-radius: var(--radius);
-  border-bottom-left-radius: var(--radius);
 }
 .rounded-tr-none {
   border-top-right-radius: 0px;
@@ -1487,24 +1490,11 @@ body {
   }
 }
 @media (min-width: 768px) {
-  .md\:w-1\/3 {
-    width: 33.333333%;
-  }
   .md\:max-w-\[420px\] {
     max-width: 420px;
   }
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .md\:flex-row {
-    flex-direction: row;
-  }
-  .md\:rounded-l-lg {
-    border-top-left-radius: var(--radius);
-    border-bottom-left-radius: var(--radius);
-  }
-  .md\:rounded-tr-none {
-    border-top-right-radius: 0px;
   }
 }
 .\[\&\+div\]\:text-xs + div {
@@ -1562,4 +1552,4 @@ body {
 .\[\&_p\]\:leading-relaxed p {
   line-height: 1.625;
 }
-/*# sourceMappingURL=/build/root-COJZDICO.css.map */
+/*# sourceMappingURL=/build/root-NJMLUFFD.css.map */
