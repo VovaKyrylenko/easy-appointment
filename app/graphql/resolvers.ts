@@ -7,14 +7,29 @@ export const resolvers = {
   Query: {
     apartments: async () => {
       try {
-         return await prisma.apartment.findMany({
-           include: {
-             bookings: true,
-           },
-         });
+        return await prisma.apartment.findMany({
+          include: {
+            bookings: true,
+          },
+        });
       } catch (error) {
-        console.error(error)
+        console.error(error);
         throw new ApolloError("Failed to fetch apartments");
+      }
+    },
+    apartment: async (_, { apartmentId }: { apartmentId: string }) => {
+      try {
+        return await prisma.apartment.findUnique({
+          where: {
+            id: apartmentId,
+          },
+          include: {
+            bookings: true,
+          },
+        });
+      } catch (error) {
+        console.error(error);
+        throw new ApolloError("Failed to fetch apartment");
       }
     },
     bookings: async () => {
@@ -42,7 +57,12 @@ export const resolvers = {
         description,
         price,
         location,
-      }: { name: string; description?: string; price: number; location: string }
+      }: {
+        name: string;
+        description?: string;
+        price: number;
+        location: string;
+      }
     ) => {
       try {
         return await prisma.apartment.create({

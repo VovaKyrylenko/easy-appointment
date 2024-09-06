@@ -7,7 +7,7 @@ interface HeaderProps {
 
 export const Header = ({ isAuthenticated }: HeaderProps) => {
   const location = useLocation();
-  const isDashboard = location.pathname === "/app/dashboard";
+  const isDashboard = location.pathname.startsWith("/app/dashboard");
   return (
     <header className="bg-blue-700 text-white py-4 mb-6 rounded-lg shadow-lg rounded-t-none">
       <div className="container mx-auto text-center text-3xl font-extrabold flex justify-between items-center">

@@ -35,6 +35,7 @@ export const typeDefs = gql`
 
   type Query {
     apartments: [Apartment!]!
+    apartment(apartmentId: ID!): Apartment
     bookings: [Booking!]!
     availability(apartmentId: ID!): [Availability!]!
   }
