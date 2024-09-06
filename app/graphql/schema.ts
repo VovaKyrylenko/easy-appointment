@@ -43,9 +43,9 @@ export const typeDefs = gql`
   type Mutation {
     createApartment(
       name: String!
-      description: String
       price: Float!
       location: String!
+      image: String
     ): Apartment!
     createBooking(
       apartmentId: ID!

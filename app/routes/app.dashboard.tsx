@@ -46,6 +46,7 @@ export default function DashboardPage() {
             apartments={apartments}
             onSelect={handleSelectApartment}
             selectedApartment={selectedApartment}
+            isDashboard
           />
         )}
 

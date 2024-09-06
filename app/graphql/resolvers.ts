@@ -51,25 +51,34 @@ export const resolvers = {
   },
   Mutation: {
     createApartment: async (
-      _,
+      _: any,
       {
         name,
-        description,
         price,
         location,
+        image,
       }: {
         name: string;
-        description?: string;
         price: number;
         location: string;
+        image?: string;
       }
     ) => {
       try {
-        return await prisma.apartment.create({
-          data: { name, description, price, location },
+        const newApartment = await prisma.apartment.create({
+          data: {
+            name,
+            price,
+            location,
+            image,
+          },
         });
+        return newApartment;
       } catch (error) {
-        throw new ApolloError("Failed to create apartment");
+        throw new ApolloError(
+          "Failed to create apartment",
+          "CREATE_APARTMENT_ERROR"
+        );
       }
     },
     createBooking: async (
