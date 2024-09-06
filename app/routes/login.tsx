@@ -85,7 +85,7 @@ export default function Login() {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   return await authenticator.isAuthenticated(request, {
-    successRedirect: "/dashboard",
+    successRedirect: "/app/dashboard",
   });
 }
 
@@ -113,7 +113,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   try {
     return await authenticator.authenticate("user-pass", request, {
-      successRedirect: "/dashboard",
+      successRedirect: "/app/dashboard",
     });
   } catch (error) {
     if (error instanceof Response) return error;

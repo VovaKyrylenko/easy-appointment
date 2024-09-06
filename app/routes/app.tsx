@@ -1,10 +1,19 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { Header } from "~/components/common/header";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { authenticator } from "~/services/auth.server";
+import { Header } from "~/components/common/header";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const user = await authenticator.isAuthenticated(request);
+  return json({ isAuthenticated: !!user });
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  await authenticator.logout(request, { redirectTo: "/app/apartment-pick" });
+}
 
 export default function AppPage() {
-    const { isAuthenticated } = useLoaderData<typeof loader>() || false;
+  const { isAuthenticated } = useLoaderData<typeof loader>()
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <Header isAuthenticated={isAuthenticated} />
@@ -14,8 +23,3 @@ export default function AppPage() {
     </div>
   );
 }
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await authenticator.isAuthenticated(request);
-  return json({ isAuthenticated: !!user });
-};
