@@ -1,8 +1,11 @@
 import { createRequestHandler } from "@remix-run/express";
-import express from "express";
+import express, { Request } from "express";
 import { ApolloServer } from "apollo-server-express";
 import { typeDefs } from "./graphql/schema";
-import { resolvers } from "./graphql/resolvers";
+import { apartmentResolvers } from "./graphql/resolvers/apartment-resolvers";
+import { bookingResolvers } from "./graphql/resolvers/booking-resolvers";
+import cookieParser from 'cookie-parser'
+import { authenticator } from "./services/auth.server";
 
 const viteDevServer =
   process.env.NODE_ENV === "production"
@@ -14,8 +17,23 @@ const viteDevServer =
       );
 
 const app = express();
+app.use(cookieParser());
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
+const authenticate = (req: Request) => {
+  const authSessionCookie = req.cookies.auth_session;
+  return !!authSessionCookie;
+};
+
+const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers: [apartmentResolvers, bookingResolvers],
+  context: async ({ req }) => {
+   const isAuthenticated = authenticate(req);
+   return {
+     isAuthenticated,
+   };
+  },
+});
 await apolloServer.start();
 apolloServer.applyMiddleware({ app });
 
