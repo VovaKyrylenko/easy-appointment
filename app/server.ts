@@ -5,7 +5,6 @@ import { typeDefs } from "./graphql/schema";
 import { apartmentResolvers } from "./graphql/resolvers/apartment-resolvers";
 import { bookingResolvers } from "./graphql/resolvers/booking-resolvers";
 import cookieParser from 'cookie-parser'
-import { authenticator } from "./services/auth.server";
 
 const viteDevServer =
   process.env.NODE_ENV === "production"
