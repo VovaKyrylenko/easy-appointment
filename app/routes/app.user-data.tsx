@@ -13,16 +13,19 @@ import {
 } from "@remix-run/react";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { Button } from "~/components/ui/button";
 import { ZodError } from "zod";
 import { userDataFormSchema } from "~/validation/user-data-form";
-import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
-import { commitSession, getSession } from "~/services/session.server";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
+import { ActionButton } from "~/components/common/action-button";
+import { Button } from "~/components/ui/button";
+import { commitDataSession, getDataSession } from "~/services/booking.session.server";
 
 export default function UserDetailsForm() {
   const actionData = useActionData<typeof action>();
-  const transition = useNavigation();
   const { userData } = useLoaderData<typeof loader>();
+
+  const transition = useNavigation();
 
   const isSubmitting = transition.state !== "idle";
   return (
@@ -79,29 +82,18 @@ export default function UserDetailsForm() {
             )}
           </div>
           <div className="w-full flex justify-between">
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-                </>
-              ) : (
-                <Link to="/app/apartment-pick" className="flex items-center">
-                  <ArrowLeft className="mr-2 h-4 w-4" /> Back
-                </Link>
-              )}
-            </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-                </>
-              ) : (
-                <>
-                  Next
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </>
-              )}
-            </Button>
+            {/* TODO */}
+            <ActionButton
+              to="/app/apartment-pick"
+              type="button"
+              isDisabled={isSubmitting}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back
+            </ActionButton>
+            <ActionButton type="submit" isLoading={isSubmitting}>
+              Next
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </ActionButton>
           </div>
         </Form>
       </div>
@@ -110,7 +102,7 @@ export default function UserDetailsForm() {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSession(request.headers.get("Cookie"));
+  const session = await getDataSession(request.headers.get("Cookie"));
   const userData = session.get("userData");
 
   return json({ userData });
@@ -125,16 +117,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   try {
     userDataFormSchema.parse({ userName, userPhone, userEmail });
-    const session = await getSession(request.headers.get("Cookie"));
+    const session = await getDataSession(request.headers.get("Cookie"));
     session.set("userData", { userName, userPhone, userEmail });
 
     return redirect("/app/confirm", {
       headers: {
-        "Set-Cookie": await commitSession(session),
+        "Set-Cookie": await commitDataSession(session),
       },
     });
   } catch (error) {
-    console.log(error);
     if (error instanceof ZodError) {
       error.errors.forEach((err) => {
         if (err.path.length) {

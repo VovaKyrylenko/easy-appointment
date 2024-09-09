@@ -1,14 +1,14 @@
-import { Link, useLoaderData, useNavigation } from "@remix-run/react";
-import { Button } from "~/components/ui/button";
+import { useLoaderData, useNavigation } from "@remix-run/react";
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   json,
   redirect,
 } from "@remix-run/node";
-import { destroySession, getSession } from "~/services/session.server";
-import { ArrowLeft, Check, Loader2 } from "lucide-react";
+import { destroyDataSession, getDataSession } from "~/services/booking.session.server";
+import { ArrowLeft, Check } from "lucide-react";
 import { useCreateBooking } from "~/hooks/use-create-booking";
+import { ActionButton } from "~/components/common/action-button";
 
 export default function ConfirmBooking() {
   const { apartment, dates, userData } = useLoaderData<typeof loader>();
@@ -42,13 +42,13 @@ export default function ConfirmBooking() {
           userEmail: userData.userEmail,
         },
       });
-       await fetch("/app/confirm", {
-         method: "POST",
-         headers: {
-           "Content-Type": "application/json",
-           "X-Remix-Action": "destroy-session",
-         },
-       });
+      await fetch("/app/confirm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Remix-Action": "destroy-session",
+        },
+      });
     } catch (error) {
       console.error("Booking creation failed:", error);
     }
@@ -105,32 +105,16 @@ export default function ConfirmBooking() {
         </div>
 
         <div className="flex mt-6 w-full justify-between">
-          <Button type="button" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-              </>
-            ) : (
-              <Link to="/app/user-data" className="flex items-center">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back
-              </Link>
-            )}
-          </Button>
-          <Button
-            type="submit"
-            disabled={isSubmitting}
+          <ActionButton to="/app/user-data" isDisabled={isSubmitting}>
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back
+          </ActionButton>
+          <ActionButton
+            to="/app/success"
+            isLoading={isSubmitting}
             onClick={handleConfirmBooking}
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-              </>
-            ) : (
-              <Link to="/app/success" className="flex">
-                Confirm Booking <Check className="ml-2 h-5 w-5" />
-              </Link>
-            )}
-          </Button>
+            Confirm Booking <Check className="ml-2 h-5 w-5" />
+          </ActionButton>
         </div>
       </div>
     </div>
@@ -138,7 +122,7 @@ export default function ConfirmBooking() {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSession(request.headers.get("Cookie"));
+  const session = await getDataSession(request.headers.get("Cookie"));
   const apartment = session.get("apartment");
   const dates = session.get("date");
   const userData = session.get("userData");
@@ -147,11 +131,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const session = await getSession(request.headers.get("Cookie"));
+  const session = await getDataSession(request.headers.get("Cookie"));
 
   if (session) {
     return redirect("/app/success", {
-      headers: { "Set-Cookie":  await destroySession(session) },
+      headers: { "Set-Cookie": await destroyDataSession(session) },
     });
   }
 };

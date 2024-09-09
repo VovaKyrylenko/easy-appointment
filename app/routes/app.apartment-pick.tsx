@@ -7,15 +7,15 @@ import {
 } from "@remix-run/node";
 import { useLoaderData, useNavigation, useSubmit } from "@remix-run/react";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { Button } from "~/components/ui/button";
 import { Apartment } from "~/graphql/generated/graphql";
-import { commitSession, getSession } from "~/services/session.server";
+import { commitDataSession, getDataSession} from "~/services/booking.session.server";
 import { useToast } from "~/hooks/use-toast";
 import { DateRange } from "react-day-picker";
 import { ApartmentSelectionSection } from "~/components/apartments/apartment-pick/apartment-selection-section";
 import { DateSelectionSection } from "~/components/apartments/apartment-pick/date-selection-section";
 import { useGetApartments } from "~/hooks/use-get-apartments";
 import { Alert, AlertTitle } from "~/components/ui/alert";
+import { ActionButton } from "~/components/common/action-button";
 
 export default function ApartmentPickPage() {
   const submit = useSubmit();
@@ -65,7 +65,7 @@ export default function ApartmentPickPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full flex-1">
-        <Loader2 />
+        <Loader2 className="animate-spin"/>
         <p className="ml-4 text-gray-600">Loading apartments...</p>
       </div>
     );
@@ -102,25 +102,23 @@ export default function ApartmentPickPage() {
         />
       </div>
       <div className="flex justify-end mt-4">
-        <Button type="submit" disabled={isSubmitting} onClick={handleSaveApartmentAndDate}>
-          {isSubmitting ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-            </>
-          ) : (
-            <>
-              Next
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </>
-          )}
-        </Button>
+        <ActionButton
+          isLoading={isSubmitting}
+          isDisabled={
+            !selectedApartment || !selectedDates?.from || !selectedDates?.to
+          }
+          onClick={handleSaveApartmentAndDate}
+        >
+          Next
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </ActionButton>
       </div>
     </div>
   );
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getSession(request.headers.get("Cookie"));
+  const session = await getDataSession(request.headers.get("Cookie"));
   const initialApartment = session.get("apartment");
   const initialDate = session.get("date");
 
@@ -132,11 +130,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const apartment = formData.get("apartment");
   const date = formData.get("date");
 
-  const session = await getSession(request.headers.get("Cookie"));
+  const session = await getDataSession(request.headers.get("Cookie"));
   session.set("apartment", JSON.parse(apartment as string));
   session.set("date", JSON.parse(date as string));
 
   return redirect("/app/user-data", {
-    headers: { "Set-Cookie": await commitSession(session) },
+    headers: { "Set-Cookie": await commitDataSession(session) },
   });
 };

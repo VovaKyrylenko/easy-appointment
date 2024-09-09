@@ -1,6 +1,6 @@
 import { Authenticator } from "remix-auth";
 import { FormStrategy } from "remix-auth-form";
-import { sessionStorage } from "./session.server";
+import { authSessionStorage } from "./auth.session.server";
 
 const SUPERUSER_EMAIL = process.env.SUPERUSER_EMAIL ?? "default@example.com";
 const SUPERUSER_PASSWORD = process.env.SUPERUSER_PASSWORD ?? "defaultpassword";
@@ -12,7 +12,9 @@ async function login(email: string, password: string) {
   throw new Error("Invalid credentials");
 }
 
-const authenticator = new Authenticator(sessionStorage, { throwOnError: true });
+const authenticator = new Authenticator(authSessionStorage, {
+  throwOnError: true,
+});
 
 authenticator.use(
   new FormStrategy(async ({ form }) => {
