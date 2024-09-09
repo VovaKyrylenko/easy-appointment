@@ -39,15 +39,6 @@ export const resolvers = {
         throw new ApolloError("Failed to fetch bookings");
       }
     },
-    availability: async (_, { apartmentId }: { apartmentId: string }) => {
-      try {
-        return await prisma.availability.findMany({
-          where: { apartmentId },
-        });
-      } catch (error) {
-        throw new ApolloError("Failed to fetch availability");
-      }
-    },
   },
   Mutation: {
     createApartment: async (
@@ -115,26 +106,6 @@ export const resolvers = {
         });
       } catch (error) {
         throw new ApolloError("Failed to create booking");
-      }
-    },
-    updateAvailability: async (
-      _,
-      {
-        apartmentId,
-        date,
-        isBooked,
-      }: { apartmentId: string; date: string; isBooked: boolean }
-    ) => {
-      try {
-        return await prisma.availability.upsert({
-          where: {
-            apartmentId_date: { apartmentId, date: new Date(date) },
-          },
-          update: { isBooked },
-          create: { apartmentId, date: new Date(date), isBooked },
-        });
-      } catch (error) {
-        throw new ApolloError("Failed to update availability");
       }
     },
   },

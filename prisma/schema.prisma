@@ -17,7 +17,6 @@ model Apartment {
   price        Float
   location     String
   bookings     Booking[]
-  availability Availability[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
 }
@@ -35,14 +34,3 @@ model Booking {
   updatedAt   DateTime  @updatedAt
 }
 
-model Availability {
-  id          String    @id @default(cuid())
-  apartmentId String
-  date        DateTime
-  isBooked    Boolean
-  apartment   Apartment @relation(fields: [apartmentId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  @@unique([apartmentId, date])
-}

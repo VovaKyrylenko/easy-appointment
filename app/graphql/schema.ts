@@ -24,20 +24,10 @@ export const typeDefs = gql`
     updatedAt: String!
   }
 
-  type Availability {
-    id: ID!
-    apartment: Apartment!
-    date: String!
-    isBooked: Boolean!
-    createdAt: String!
-    updatedAt: String!
-  }
-
   type Query {
     apartments: [Apartment!]!
     apartment(apartmentId: ID!): Apartment
     bookings: [Booking!]!
-    availability(apartmentId: ID!): [Availability!]!
   }
 
   type Mutation {
@@ -55,10 +45,5 @@ export const typeDefs = gql`
       userPhone: String!
       userEmail: String!
     ): Booking!
-    updateAvailability(
-      apartmentId: ID!
-      date: String!
-      isBooked: Boolean!
-    ): Availability!
   }
 `;
