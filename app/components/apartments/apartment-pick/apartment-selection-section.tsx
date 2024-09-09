@@ -26,11 +26,18 @@ export const ApartmentSelectionSection = ({
           Choose an Apartment
         </h2>
         {isDashboard && (
+          <div className="flex space-x-2">
+          <Button variant="outline" asChild>
+            <Link to="/app/dashboard/requests-list">
+              View all reservations
+            </Link>
+          </Button>
           <Button variant="outline" size="icon" asChild>
             <Link to="/app/dashboard/create-apartment">
               <Plus />
             </Link>
           </Button>
+          </div>
         )}
       </div>
       <p className="mb-6 text-gray-600">

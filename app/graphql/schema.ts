@@ -45,5 +45,6 @@ export const typeDefs = gql`
       userPhone: String!
       userEmail: String!
     ): Booking!
+    deleteBooking(bookingId: ID!): Boolean!
   }
 `;

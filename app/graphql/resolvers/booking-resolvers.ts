@@ -6,7 +6,7 @@ export const bookingResolvers = {
   Query: {
     bookings: async () => {
       try {
-        return await prisma.booking.findMany();
+        return await prisma.booking.findMany({ include: { apartment: true } });
       } catch (error) {
         throw new ApolloError("Failed to fetch bookings");
       }
@@ -52,6 +52,20 @@ export const bookingResolvers = {
         });
       } catch (error) {
         throw new ApolloError("Failed to create booking");
+      }
+    },
+    deleteBooking: async (
+      _: any,
+      { bookingId }: { bookingId: string }
+    ) => {
+      try {
+        await prisma.booking.delete({
+          where: { id: bookingId },
+        });
+        return true;
+      } catch (error) {
+        console.error("Error deleting booking:", error);
+        return false;
       }
     },
   },
