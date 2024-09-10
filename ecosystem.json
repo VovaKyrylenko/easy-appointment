@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "app",
-      "script": "npm run build && npx prisma db push && npm run start",
+      "script": "npm run start",
       "env_production": {
         "NODE_ENV": "production"
       },
