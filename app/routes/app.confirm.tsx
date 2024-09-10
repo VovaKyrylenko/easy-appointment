@@ -1,19 +1,20 @@
-import { useLoaderData, useNavigation } from "@remix-run/react";
+import { useLoaderData, useNavigation, Form } from "@remix-run/react";
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   json,
   redirect,
 } from "@remix-run/node";
-import { destroyDataSession, getDataSession } from "~/services/booking.session.server";
+import {
+  commitDataSession,
+  getDataSession,
+} from "~/services/booking.session.server";
 import { ArrowLeft, Check } from "lucide-react";
-import { useCreateBooking } from "~/hooks/use-create-booking";
 import { ActionButton } from "~/components/common/action-button";
 
 export default function ConfirmBooking() {
   const { apartment, dates, userData } = useLoaderData<typeof loader>();
-  const { createBooking, error } = useCreateBooking();
-  const transition = useNavigation();
+  const navigation = useNavigation();
 
   if (!apartment || !dates?.from || !dates?.to || !userData) {
     return (
@@ -30,31 +31,7 @@ export default function ConfirmBooking() {
     return days * apartment.price;
   };
 
-  const handleConfirmBooking = async () => {
-    try {
-      await createBooking({
-        variables: {
-          apartmentId: apartment.id,
-          startDate: dates.from,
-          endDate: dates.to,
-          userName: userData.userName,
-          userPhone: userData.userPhone,
-          userEmail: userData.userEmail,
-        },
-      });
-      await fetch("/app/confirm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Remix-Action": "destroy-session",
-        },
-      });
-    } catch (error) {
-      console.error("Booking creation failed:", error);
-    }
-  };
-
-  const isSubmitting = transition.state !== "idle";
+  const isSubmitting = navigation.state === "submitting";
 
   return (
     <div className="flex items-center justify-center flex-1">
@@ -62,12 +39,6 @@ export default function ConfirmBooking() {
         <h2 className="text-2xl font-semibold mb-6 text-center">
           Booking Summary
         </h2>
-
-        {error && (
-          <p className="text-red-500 text-center">
-            Failed to create booking: {error.message}
-          </p>
-        )}
 
         <div className="space-y-4">
           <div className="flex justify-between">
@@ -104,18 +75,19 @@ export default function ConfirmBooking() {
           </div>
         </div>
 
-        <div className="flex mt-6 w-full justify-between">
+        <Form method="post" className="flex mt-6 w-full justify-between">
+          <input
+            type="hidden"
+            name="totalAmount"
+            value={calculateTotalPrice().toFixed(2)}
+          />
           <ActionButton to="/app/user-data" isDisabled={isSubmitting}>
             <ArrowLeft className="mr-2 h-4 w-4" /> Back
           </ActionButton>
-          <ActionButton
-            to="/app/success"
-            isLoading={isSubmitting}
-            onClick={handleConfirmBooking}
-          >
-            Confirm Booking <Check className="ml-2 h-5 w-5" />
+          <ActionButton type="submit" isLoading={isSubmitting}>
+            Proceed to payment <Check className="ml-2 h-5 w-5" />
           </ActionButton>
-        </div>
+        </Form>
       </div>
     </div>
   );
@@ -127,15 +99,24 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const dates = session.get("date");
   const userData = session.get("userData");
 
+  if (!apartment || !dates || !userData) {
+    throw redirect("/app/search");
+  }
+
   return json({ apartment, dates, userData });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const session = await getDataSession(request.headers.get("Cookie"));
+  const formData = await request.formData();
+  const totalAmount = formData.get("totalAmount");
 
-  if (session) {
-    return redirect("/app/success", {
-      headers: { "Set-Cookie": await destroyDataSession(session) },
-    });
+  if (!totalAmount) {
+    return json({ error: "Total amount is required" }, { status: 400 });
   }
+
+  session.set("totalAmount", totalAmount);
+  return redirect("/app/pay", {
+    headers: { "Set-Cookie": await commitDataSession(session) },
+  });
 };
