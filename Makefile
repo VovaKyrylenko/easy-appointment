@@ -8,5 +8,5 @@ deploy:
 	npm install
 	npm run build
 	npx prisma db push
-    pm2 startOrRestart ecosystem.json
+	pm2 startOrRestart ecosystem.json
 	pm2 save 
