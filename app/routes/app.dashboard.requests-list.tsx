@@ -2,8 +2,8 @@ import { Form, useNavigation } from "@remix-run/react";
 import { format } from "date-fns";
 import { Button } from "~/components/ui/button";
 import { Booking } from "~/graphql/generated/graphql";
-import { useGetBookings } from "~/hooks/use-get-bookings";
-import { useDeleteBooking } from "~/hooks/use-delete-booking";
+import { useGetBookings } from "~/hooks/use-get-bookings.client";
+import { useDeleteBooking } from "~/hooks/use-delete-booking.client";
 import {
   Card,
   CardHeader,

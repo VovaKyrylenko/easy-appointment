@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from "apollo-server-express";
 
 export const GET_APARTMENTS = gql`
   query GetApartments {

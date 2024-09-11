@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from "apollo-server-express";
 
 export const GET_APARTMENT_BOOKINGS = gql`
   query GetApartmentBookings($apartmentId: ID!) {

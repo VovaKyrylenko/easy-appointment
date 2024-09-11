@@ -8,12 +8,15 @@ import {
 import { useLoaderData, useNavigation, useSubmit } from "@remix-run/react";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Apartment } from "~/graphql/generated/graphql";
-import { commitDataSession, getDataSession} from "~/services/booking.session.server";
+import {
+  commitDataSession,
+  getDataSession,
+} from "~/services/booking.session.server";
 import { useToast } from "~/hooks/use-toast";
 import { DateRange } from "react-day-picker";
 import { ApartmentSelectionSection } from "~/components/apartments/apartment-pick/apartment-selection-section";
 import { DateSelectionSection } from "~/components/apartments/apartment-pick/date-selection-section";
-import { useGetApartments } from "~/hooks/use-get-apartments";
+import { useGetApartments } from "~/hooks/use-get-apartments.client";
 import { Alert, AlertTitle } from "~/components/ui/alert";
 import { ActionButton } from "~/components/common/action-button";
 
@@ -65,7 +68,7 @@ export default function ApartmentPickPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full flex-1">
-        <Loader2 className="animate-spin"/>
+        <Loader2 className="animate-spin" />
         <p className="ml-4 text-gray-600">Loading apartments...</p>
       </div>
     );

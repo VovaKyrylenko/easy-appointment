@@ -6,13 +6,7 @@ import { RemixServer } from "@remix-run/react";
 import * as isbotModule from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 
-import {
-  ApolloProvider,
-  ApolloClient,
-  InMemoryCache,
-  createHttpLink,
-} from "@apollo/client";
-import { getDataFromTree } from "@apollo/client/react/ssr";
+
 import type { ReactElement } from "react";
 
 const ABORT_DELAY = 5_000;
@@ -119,14 +113,12 @@ function handleBrowserRequest(
     let shellRendered = false;
 
     const { pipe, abort } = renderToPipeableStream(
-      await wrapRemixServerWithApollo(
         <RemixServer
           context={remixContext}
           url={request.url}
           abortDelay={ABORT_DELAY}
         />,
-        request,
-      ),
+      
       {
         onShellReady() {
           shellRendered = true;
@@ -162,43 +154,4 @@ function handleBrowserRequest(
     setTimeout(abort, ABORT_DELAY);
   });
 }
-async function wrapRemixServerWithApollo(
-  remixServer: ReactElement,
-  request: Request,
-) {
-  const client = await getApolloClient(request);
 
-  const app = <ApolloProvider client={client}>{remixServer}</ApolloProvider>;
-
-  await getDataFromTree(app);
-  const initialState = client.extract();
-
-  const appWithData = (
-    <>
-      {app}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `window.__APOLLO_STATE__=${JSON.stringify(
-            initialState,
-          ).replace(/</g, "\\u003c")}`, // The replace call escapes the < character to prevent cross-site scripting attacks that are possible via the presence of </script> in a string literal
-        }}
-      />
-    </>
-  );
-  return appWithData;
-}
-
-async function getApolloClient(request: Request) {
-  const client = new ApolloClient({
-    ssrMode: true,
-    cache: new InMemoryCache(),
-    link: createHttpLink({
-      uri: "http://localhost:3000/graphql",
-      headers: {
-        ...Object.fromEntries(request.headers),
-      },
-      credentials: request.credentials ?? "same-origin",
-    }),
-  });
-  return client;
-}
