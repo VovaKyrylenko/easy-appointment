@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express";
+import { gql } from "@apollo/client";
 
 export const CREATE_APARTMENT_MUTATION = gql`
   mutation CreateApartment(

@@ -5,7 +5,7 @@ import { typeDefs } from "./app/graphql/schema";
 import { apartmentResolvers } from "./app/graphql/resolvers/apartment-resolvers";
 import { bookingResolvers } from "./app/graphql/resolvers/booking-resolvers";
 import cookieParser from "cookie-parser";
-import "dotenv/config"; 
+import "dotenv/config";
 
 const viteDevServer =
   process.env.NODE_ENV === "production"
@@ -41,11 +41,13 @@ apolloServer.applyMiddleware({ app });
 app.use(
   viteDevServer ? viteDevServer.middlewares : express.static("build/client")
 );
-
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("Importing server build...");
 const build = viteDevServer
   ? () => viteDevServer.ssrLoadModule("virtual:remix/server-build")
   : //   @ts-ignore import error
     await import("../build/server/index.js");
+console.log("Server build imported");
 
 app.all("*", createRequestHandler({ build }));
 
