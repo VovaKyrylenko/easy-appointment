@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "app",
-      "script": "npm run start",
+      "script": "npm run dev",
       "env_production": {
         "NODE_ENV": "production"
       },
