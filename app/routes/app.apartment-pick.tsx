@@ -16,7 +16,7 @@ import { useToast } from "~/hooks/use-toast";
 import { DateRange } from "react-day-picker";
 import { ApartmentSelectionSection } from "~/components/apartments/apartment-pick/apartment-selection-section";
 import { DateSelectionSection } from "~/components/apartments/apartment-pick/date-selection-section";
-import { useGetApartments } from "~/hooks/use-get-apartments.client";
+import { useGetApartments } from "~/hooks/use-get-apartments";
 import { Alert, AlertTitle } from "~/components/ui/alert";
 import { ActionButton } from "~/components/common/action-button";
 

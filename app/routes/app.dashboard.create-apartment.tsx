@@ -20,7 +20,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
-import { useCreateApartment } from "~/hooks/use-create-apartment.client";
+import { useCreateApartment } from "~/hooks/use-create-apartment";
 import { apartmentSchema } from "~/validation/apartment-form-schema";
 
 export const action: ActionFunction = async ({ request }) => {

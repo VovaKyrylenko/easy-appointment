@@ -1,6 +1,8 @@
 import { useQuery } from "@apollo/client";
 import { Apartment } from "~/graphql/generated/graphql";
 import { GET_APARTMENTS } from "~/graphql/queries/get-apartments";
+// import { default as pkg } from "@apollo/client";
+// const { useQuery } = pkg;
 
 interface UseApartmentsResult {
   apartments: Apartment[];

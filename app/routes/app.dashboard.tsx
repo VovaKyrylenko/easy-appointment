@@ -3,7 +3,7 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import { ApartmentSelectionSection } from "~/components/apartments/apartment-pick/apartment-selection-section";
 import { Apartment } from "~/graphql/generated/graphql";
-import { useGetApartments } from "~/hooks/use-get-apartments.client";
+import { useGetApartments } from "~/hooks/use-get-apartments";
 import { authenticator } from "~/services/auth.server";
 import { useNavigate } from "@remix-run/react";
 import { Loader2 } from "lucide-react";

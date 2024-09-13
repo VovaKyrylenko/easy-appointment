@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { Form, useSubmit, useNavigation } from "@remix-run/react";
 import { AlertCircle, CheckCircle } from "lucide-react";
-import { useCreateBooking } from "~/hooks/use-create-booking.client";
+import { useCreateBooking } from "~/hooks/use-create-booking";
 import { Apartment } from "~/graphql/generated/graphql";
 import { DateRange } from "react-day-picker";
 

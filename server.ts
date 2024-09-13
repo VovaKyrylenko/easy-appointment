@@ -46,7 +46,7 @@ console.log("Importing server build...");
 const build = viteDevServer
   ? () => viteDevServer.ssrLoadModule("virtual:remix/server-build")
   : //   @ts-ignore import error
-    await import("../build/server/index.js");
+    await import("./build/server/index.js");
 console.log("Server build imported");
 
 app.all("*", createRequestHandler({ build }));

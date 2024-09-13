@@ -3,7 +3,7 @@ import { useLoaderData } from "@remix-run/react";
 import { Calendar } from "~/components/ui/calendar";
 import { format } from "date-fns";
 import { useMemo } from "react";
-import { useGetApartment } from "~/hooks/use-get-apartment.client";
+import { useGetApartment } from "~/hooks/use-get-apartment";
 import type { Booking } from "@prisma/client";
 import {
   Tooltip,

@@ -6,8 +6,8 @@ import { RemixServer } from "@remix-run/react";
 import * as isbotModule from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 
-
 import type { ReactElement } from "react";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 const ABORT_DELAY = 5_000;
 
@@ -16,7 +16,7 @@ export default function handleRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  loadContext: AppLoadContext,
+  loadContext: AppLoadContext
 ) {
   let prohibitOutOfOrderStreaming =
     isBotRequest(request.headers.get("user-agent")) || remixContext.isSpaMode;
@@ -57,7 +57,7 @@ function handleBotRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  remixContext: EntryContext
 ) {
   return new Promise((resolve, reject) => {
     let shellRendered = false;
@@ -79,7 +79,7 @@ function handleBotRequest(
             new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
-            }),
+            })
           );
 
           pipe(body);
@@ -96,7 +96,7 @@ function handleBotRequest(
             console.error(error);
           }
         },
-      },
+      }
     );
 
     setTimeout(abort, ABORT_DELAY);
@@ -107,18 +107,25 @@ function handleBrowserRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext,
+  remixContext: EntryContext
 ) {
   return new Promise(async (resolve, reject) => {
     let shellRendered = false;
+    const client = new ApolloClient({
+      ssrMode: true,
+      cache: new InMemoryCache(),
+      uri: "http://localhost:3000/graphql",
+    });
 
     const { pipe, abort } = renderToPipeableStream(
+      <ApolloProvider client={client}>
         <RemixServer
           context={remixContext}
           url={request.url}
           abortDelay={ABORT_DELAY}
-        />,
-      
+        />
+      </ApolloProvider>,
+
       {
         onShellReady() {
           shellRendered = true;
@@ -131,7 +138,7 @@ function handleBrowserRequest(
             new Response(stream, {
               headers: responseHeaders,
               status: responseStatusCode,
-            }),
+            })
           );
 
           pipe(body);
@@ -148,10 +155,9 @@ function handleBrowserRequest(
             console.error(error);
           }
         },
-      },
+      }
     );
 
     setTimeout(abort, ABORT_DELAY);
   });
 }
-
